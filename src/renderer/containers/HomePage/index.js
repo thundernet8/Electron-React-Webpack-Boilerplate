@@ -7,7 +7,7 @@ class HomePage extends Component {
     return (
       <div className="home">
         <h2>Hello, Electron & React</h2>
-        <p>Welcome...</p>
+        <p>Welcome... {this.props.data.name}</p>
       </div>
     );
   }
@@ -18,6 +18,6 @@ class HomePage extends Component {
 // Which props to inject from the global atomic state
 export default connect((state) => {
   return {
-    data: state.data,
+    data: state.mainReducer.data,
   };
 })(HomePage);
