@@ -1,7 +1,6 @@
 import path from 'path'
 import webpack from 'webpack'
 import config from './webpack.base.conf.babel'
-import ExtractTextPlugin from 'extract-text-webpack-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import _ from 'lodash'
 
@@ -42,8 +41,6 @@ config.plugins = (config.plugins || []).concat([
   new webpack.optimize.OccurenceOrderPlugin(),
   // extract css into its own file
   // new ExtractTextPlugin('[name].[contenthash:8].css')
-  // extract css to one file
-  new ExtractTextPlugin('style.css', { allChunks: true })
 ])
 
 var electronConfig = _.cloneDeep(config)

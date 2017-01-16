@@ -1,6 +1,5 @@
-import path from 'path'
-import cssImport from 'postcss-import'
-import cssNested from 'postcss-nested'
+var path = require('path')
+var ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 module.exports = {
   // http://webpack.github.io/docs/configuration.html#node
@@ -57,19 +56,29 @@ module.exports = {
         test: /\.json$/,
         loader: 'json'
       },
+      // {
+      //   test: /\.global\.css$/,
+      //   loaders: [
+      //     'style-loader',
+      //     'css-loader?sourceMap!postcss-loader'
+      //   ]
+      // },
       {
-        test: /\.global\.css$/,
-        loaders: [
-          'style-loader',
-          'css-loader?sourceMap!postcss-loader'
-        ]
+        test: /\.css$/,
+        include: /styles\/global/,
+        loader: ExtractTextPlugin.extract('style-loader', 'css-loader?sourceMap!postcss-loader')
       },
+      // {
+      //   test: /^((?!\.global).)*\.css$/,
+      //   loaders: [
+      //     'style-loader',
+      //     'css-loader?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader'
+      //   ]
+      // },
       {
-        test: /^((?!\.global).)*\.css$/,
-        loaders: [
-          'style-loader',
-          'css-loader?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader'
-        ]
+        test: /\.css$/,
+        exclude: /styles\/global/,
+        loader: ExtractTextPlugin.extract('style-loader', 'css-loader?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader')
       },
       {
         test: /\.(png|jpg|gif|svg)$/,
@@ -83,11 +92,16 @@ module.exports = {
   },
   postcss() {
     return [
-      cssImport,
-      cssNested,
+      require('postcss-import'),
+      require('postcss-nested'),
+      require('autoprefixer-core')
     ];
   },
   eslint: {
     formatter: require('eslint-friendly-formatter')
-  }
+  },
+  plugins: [
+    // extract css to one file
+    new ExtractTextPlugin('style.css', { allChunks: true })
+  ]
 }

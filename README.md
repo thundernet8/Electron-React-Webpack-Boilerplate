@@ -20,10 +20,13 @@
      - index.js
    + renderer             // 用于Electron渲染进程逻辑代码
      + actions
+     + assets
      + components
      + constants
      + containers
      + reducers
+     + styles
+     + utils
      - index.html
      - index.js
      - routes.js

@@ -11,6 +11,7 @@ import routes from './routes'
 // import * as reducers from './reducers'
 import mainReducer from './reducers/mainReducer'
 // import * as actions from './actions'
+import styles from './styles/global/normalize.css'
 
 // const logger = createLogger({
 //   predicate: (getState, action) => action.type !== 'FETCHING'

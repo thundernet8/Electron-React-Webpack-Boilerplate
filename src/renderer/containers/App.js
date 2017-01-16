@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
 import { connect } from 'react-redux'
+import styles from '../styles/App.css'
 
 class App extends Component {
   render () {
@@ -15,7 +16,9 @@ class App extends Component {
           <Link to="/input" style={linkStyle}>Input</Link>
           <Link to="/about" style={linkStyle}>About</Link>
         </ul>
-        {this.props.children}
+        <div className={styles.container}>
+          {this.props.children}
+        </div>
       </div>
     )
   }
