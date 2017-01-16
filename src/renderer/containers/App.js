@@ -3,7 +3,7 @@ import { Link } from 'react-router'
 import { connect } from 'react-redux'
 
 class App extends Component {
-  render() {
+  render () {
     var linkStyle = {
       padding: 5,
       lineHeight: 2
@@ -17,7 +17,7 @@ class App extends Component {
         </ul>
         {this.props.children}
       </div>
-    );
+    )
   }
 }
 
@@ -27,5 +27,5 @@ class App extends Component {
 export default connect((state) => {
   return {
     data: state.mainReducer // see renderer/index.js line19-
-  };
-})(App);
+  }
+})(App)

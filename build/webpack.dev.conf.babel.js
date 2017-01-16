@@ -1,7 +1,7 @@
-var path = require('path')
-var webpack = require('webpack')
-var config = require('./webpack.base.conf')
-var HtmlWebpackPlugin = require('html-webpack-plugin')
+import path from 'path'
+import webpack from 'webpack'
+import config from './webpack.base.conf.babel'
+import HtmlWebpackPlugin from 'html-webpack-plugin'
 
 // eval-source-map is faster for development
 config.devtool = '#eval-source-map'

@@ -1,9 +1,9 @@
-var path = require('path')
-var webpack = require('webpack')
-var config = require('./webpack.base.conf')
-var ExtractTextPlugin = require('extract-text-webpack-plugin')
-var HtmlWebpackPlugin = require('html-webpack-plugin')
-var _ = require('lodash')
+import path from 'path'
+import webpack from 'webpack'
+import config from './webpack.base.conf.babel'
+import ExtractTextPlugin from 'extract-text-webpack-plugin'
+import HtmlWebpackPlugin from 'html-webpack-plugin'
+import _ from 'lodash'
 
 config.output.filename = '[name].[chunkhash:8].js' // [name].[chunkhash]
 config.output.chunkFilename = '[id].js' // [id].[chunkhash]

@@ -3,13 +3,13 @@ import { Link } from 'react-router'
 import { connect } from 'react-redux'
 
 class HomePage extends Component {
-  render() {
+  render () {
     return (
       <div className="home">
         <h2>Hello, Electron & React</h2>
         <p>Welcome... {this.props.data.name}</p>
       </div>
-    );
+    )
   }
 }
 
@@ -18,6 +18,6 @@ class HomePage extends Component {
 // Which props to inject from the global atomic state
 export default connect((state) => {
   return {
-    data: state.mainReducer.data,
-  };
-})(HomePage);
+    data: state.mainReducer.data
+  }
+})(HomePage)

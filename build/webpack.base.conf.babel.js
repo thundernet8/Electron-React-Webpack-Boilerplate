@@ -1,4 +1,6 @@
-var path = require('path')
+import path from 'path'
+import cssImport from 'postcss-import'
+import cssNested from 'postcss-nested'
 
 module.exports = {
   // http://webpack.github.io/docs/configuration.html#node
@@ -29,18 +31,18 @@ module.exports = {
   },
   target: 'electron-renderer',  // important
   module: {
-    // preLoaders: [
-    //   {
-    //     test: /\.jsx$/,
-    //     loader: 'eslint',
-    //     exclude: /node_modules/
-    //   },
-    //   {
-    //     test: /\.js$/,
-    //     loader: 'eslint',
-    //     exclude: /node_modules/
-    //   }
-    // ],
+    preLoaders: [
+      {
+        test: /\.jsx$/,
+        loader: 'eslint',
+        exclude: /node_modules/
+      },
+      {
+        test: /\.js$/,
+        loader: 'eslint',
+        exclude: /node_modules/
+      }
+    ],
     loaders: [
       {
         test: /\.js$/,
@@ -59,14 +61,14 @@ module.exports = {
         test: /\.global\.css$/,
         loaders: [
           'style-loader',
-          'css-loader?sourceMap'
+          'css-loader?sourceMap!postcss-loader'
         ]
       },
       {
         test: /^((?!\.global).)*\.css$/,
         loaders: [
           'style-loader',
-          'css-loader?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]'
+          'css-loader?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader'
         ]
       },
       {
@@ -78,6 +80,12 @@ module.exports = {
         }
       }
     ]
+  },
+  postcss() {
+    return [
+      cssImport,
+      cssNested,
+    ];
   },
   eslint: {
     formatter: require('eslint-friendly-formatter')
