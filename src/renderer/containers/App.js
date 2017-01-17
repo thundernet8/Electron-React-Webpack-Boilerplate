@@ -20,7 +20,7 @@ class App extends Component {
     return (
       <div>
         <ul className={navCls}>
-          <Link to="/" style={linkStyle} activeClassName={styles.activeNavItem}>Home</Link>
+          <Link to="/" style={linkStyle} onlyActiveOnIndex={true} activeClassName={styles.activeNavItem}>Home</Link>
           <Link to="/input" style={linkStyle} activeClassName={styles.activeNavItem}>Input</Link>
           <Link to="/about" style={linkStyle} activeClassName={styles.activeNavItem}>About</Link>
         </ul>
