@@ -81,6 +81,16 @@ module.exports = {
         loader: ExtractTextPlugin.extract('style-loader', 'css-loader?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader')
       },
       {
+        test: /\.scss$/,
+        include: /styles\/global/,
+        loader: ExtractTextPlugin.extract('style-loader', 'css-loader?sourceMap!sass-loader!postcss-loader')
+      },
+      {
+        test: /\.scss$/,
+        exclude: /styles\/global/,
+        loader: ExtractTextPlugin.extract('style-loader', 'css-loader?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!sass-loader!postcss-loader')
+      },
+      {
         test: /\.(png|jpg|gif|svg)$/,
         loader: 'url',
         query: {
@@ -94,7 +104,7 @@ module.exports = {
     return [
       require('postcss-import'),
       require('postcss-nested'),
-      require('autoprefixer-core')
+      require('autoprefixer')
     ];
   },
   eslint: {

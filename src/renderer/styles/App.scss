@@ -9,10 +9,8 @@
   transition: all .3s ease; /* test autoprefixer */
 }
 
-.homeNav {
-  font-weight: bold;
-}
+$color: #232425;
 
-.activeNavItem {
-  color: red;
+:export {
+  color: $color;
 }
