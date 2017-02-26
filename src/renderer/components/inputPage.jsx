@@ -1,14 +1,12 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router'
-import { connect } from 'react-redux'
-import triggerAction from '../../actions'
-import * as types from '../../constants'
+import React, { Component }         from 'react'
+import triggerAction                from '../actions'
+import * as types                   from '../constants'
 
 const defaultData = {
   name: ''
 }
 
-class InputName extends Component {
+export default class InputName extends Component {
   constructor (props) {
       super(props)
       this.state = defaultData
@@ -39,12 +37,3 @@ class InputName extends Component {
     )
   }
 }
-
-// Redux connection
-
-// Which props to inject from the global atomic state
-export default connect((state) => {
-  return {
-    data: state.mainReducer.data
-  }
-})(InputName)

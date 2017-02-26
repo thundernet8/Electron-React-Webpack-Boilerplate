@@ -1,6 +1,6 @@
 ## Electron-React-Webpack-Boilerplate
 
-使用Electron、React、Webpack打包和热加载开发的样板工程，用于快速搭建初始开发环境
+使用Electron、React、Webpack2打包和热加载开发的样板工程，用于快速搭建初始开发环境
 
 
 ## 目录结构
@@ -28,8 +28,8 @@
      + styles
      + utils
      - index.html
-     - index.js
-     - routes.js
+     - index.jsx
+     - routes.jsx
  + test                   // 测试文件夹
  - package.json           // 开发环境依赖 devDependencies
 ```
@@ -48,6 +48,8 @@ npm run pack              // 仅生成包目录, 不打包, 测试用途
 npm run dist              // 打包成安装程序
 
 npm run start             // 启动Electron(开发环境, 请先运行build-dev)
+
+npm run dev               // 开发环境资源build并启动热加载server
 ```
 
 ## 截图

@@ -1,14 +1,14 @@
-var path = require('path')
-var ExtractTextPlugin = require('extract-text-webpack-plugin')
+import path               from 'path'
+import ExtractTextPlugin  from 'extract-text-webpack-plugin'
 
-module.exports = {
+export default {
   // http://webpack.github.io/docs/configuration.html#node
   node: {
 		__filename: false,
 		__dirname: false
 	},
   entry: {
-    app: './src/renderer/index.js',
+    app: './src/renderer/index.jsx',
     electron: './src/main/index.js'
   },
   output: {
@@ -17,101 +17,102 @@ module.exports = {
     filename: '[name].js'
   },
   resolve: {
-    extensions: ['', '.js', '.jsx'],
-    fallback: [path.join(__dirname, '../node_modules')],
+    extensions: ['.js', '.jsx', '.css', '.scss'],
+    modules: [
+      path.join(__dirname, '../node_modules')
+    ],
     alias: {
       'app': path.resolve(__dirname, '../app'),
       'dist': path.resolve(__dirname, '../dist'),
       'src': path.resolve(__dirname, '../src')
     }
   },
-  resolveLoader: {
-    fallback: [path.join(__dirname, '../node_modules')]
-  },
   target: 'electron-renderer',  // important
   module: {
-    preLoaders: [
+    rules: [
       {
         test: /\.jsx$/,
-        loader: 'eslint',
-        exclude: /node_modules/
+        loader: 'eslint-loader',
+        exclude: /node_modules/,
+        enforce: 'pre',
+        options: {
+          formatter: require('eslint-friendly-formatter')
+        }
       },
       {
         test: /\.js$/,
-        loader: 'eslint',
-        exclude: /node_modules/
-      }
-    ],
-    loaders: [
+        loader: 'eslint-loader',
+        exclude: /node_modules/,
+        enforce: 'pre',
+        options: {
+          formatter: require('eslint-friendly-formatter')
+        }
+      },
       {
         test: /\.js$/,
-        loader: 'babel',
-        query: {
-          presets: ['react', 'es2015', 'stage-2'],
-          plugins: ['transform-runtime', 'transform-decorators-legacy']
-        },
+        loader: 'babel-loader?presets[]=es2015&presets[]=stage-2',
         exclude: /node_modules/
       },
       {
         test: /\.json$/,
-        loader: 'json'
+        loader: 'json-loader'
       },
-      // {
-      //   test: /\.global\.css$/,
-      //   loaders: [
-      //     'style-loader',
-      //     'css-loader?sourceMap!postcss-loader'
-      //   ]
-      // },
       {
         test: /\.css$/,
-        include: /global/,
-        loader: ExtractTextPlugin.extract('style-loader', 'css-loader?sourceMap!postcss-loader')
+        include: [/global/, /node_modules/],
+        loader: ExtractTextPlugin.extract({fallback: 'style-loader', use: 'css-loader?sourceMap!postcss-loader'})
       },
-      // {
-      //   test: /^((?!\.global).)*\.css$/,
-      //   loaders: [
-      //     'style-loader',
-      //     'css-loader?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader'
-      //   ]
-      // },
       {
         test: /\.css$/,
-        exclude: /global/,
-        loader: ExtractTextPlugin.extract('style-loader', 'css-loader?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader')
+        exclude: [/global/, /node_modules/],
+        loader: ExtractTextPlugin.extract({fallback: 'style-loader', use: 'css-loader?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader'})
+      },
+      {
+        test: /\.less$/,
+        include: [/global/, /node_modules/],
+        loader: ExtractTextPlugin.extract({fallback: 'style-loader', use: 'css-loader?sourceMap!postcss-loader!less-loader'})
+      },
+      {
+        test: /\.less$/,
+        exclude: [/global/, /node_modules/],
+        loader: ExtractTextPlugin.extract({fallback: 'style-loader', use: 'css-loader?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader!less-loader'})
       },
       {
         test: /\.scss$/,
-        include: /styles\/global/,
-        loader: ExtractTextPlugin.extract('style-loader', 'css-loader?sourceMap!sass-loader!postcss-loader')
+        include: [/global/, /node_modules/],
+        loader: ExtractTextPlugin.extract({fallback: 'style-loader', use: 'css-loader?sourceMap!postcss-loader!sass-loader'})
       },
       {
         test: /\.scss$/,
-        exclude: /styles\/global/,
-        loader: ExtractTextPlugin.extract('style-loader', 'css-loader?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!sass-loader!postcss-loader')
+        exclude: [/global/, /node_modules/],
+        loader: ExtractTextPlugin.extract({fallback: 'style-loader', use: 'css-loader?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader!sass-loader'})
       },
       {
-        test: /\.(png|jpg|gif|svg)$/,
-        loader: 'url',
+        test: /\.(png|jpg|gif)$/,
+        exclude: /node_modules/,
+        loader: 'url-loader',
         query: {
           limit: 10000,
-          name: '[name].[ext]?[hash:7]'
+          name: 'assets/images/[name].[ext]' // 'assets/images/[name].[ext]?[hash:7]'
         }
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf|svg)/, // if /\.(woff|woff2|eot|ttf|svg)$/ the font-awesome with url like xx.woff?v=4.7.0 can not be loaded
+        exclude: /node_modules/,
+        loader: 'url-loader',
+        query: {
+          limit: 10000,
+          name: 'assets/fonts/[name].[ext]'
+        }
+      },
+      {
+        test: /\.node$/,
+        loader: 'node-loader'
       }
     ]
   },
-  postcss() {
-    return [
-      require('postcss-import'),
-      require('postcss-nested'),
-      require('autoprefixer')
-    ];
-  },
-  eslint: {
-    formatter: require('eslint-friendly-formatter')
-  },
   plugins: [
     // extract css to one file
-    new ExtractTextPlugin('style.css', { allChunks: true })
+    new ExtractTextPlugin({filename: 'style.css', disable: false, allChunks: true})
   ]
 }

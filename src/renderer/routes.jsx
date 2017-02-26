@@ -2,11 +2,11 @@ import React from 'react'
 import { IndexRoute, Route, Link, IndexRedirect, Redirect } from 'react-router'
 
 /* containers */
-import App from './containers/App'
-import HomePage from './containers/HomePage'
-import AboutPage from './containers/AboutPage'
-import InputPage from './containers/InputPage'
-import NotFoundPage from './containers/NotFoundPage'
+import App from './containers/app'
+import HomePage from './containers/homePage'
+import AboutPage from './containers/aboutPage'
+import InputPage from './containers/inputPage'
+import NotFoundPage from './containers/notFoundPage'
 
 const routes = (
   <Route path="/" component={App}>

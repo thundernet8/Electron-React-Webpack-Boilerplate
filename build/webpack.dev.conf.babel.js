@@ -1,47 +1,59 @@
-var path = require('path')
-var webpack = require('webpack')
-var config = require('./webpack.base.conf.babel')
-var HtmlWebpackPlugin = require('html-webpack-plugin')
+import path               from 'path'
+import webpack            from 'webpack'
+import baseConfig         from './webpack.base.conf.babel'
+import merge              from 'webpack-merge'
+import HtmlWebpackPlugin  from 'html-webpack-plugin'
 
-// eval-source-map is faster for development
-config.devtool = '#eval-source-map'
+const port = process.env.PORT || 3000
 
-config.module.loaders = (config.module.loaders || []).concat({
-  test: /\.jsx$/,
-  loader: 'babel',
-  query: {
-    presets: ['react-hot', 'es2015', 'stage-2'],
-    plugins: ['transform-runtime', 'transform-decorators-legacy']
+let devConfig = {
+  // eval-source-map is faster for development
+  devtool: '#eval-source-map',
+
+  entry: {
+    app: [
+      `webpack-hot-middleware/client?path=http://localhost:${port}/__webpack_hmr`,
+      'babel-polyfill',
+      './src/renderer/index.jsx'
+    ],
+    electron: [
+      `webpack-hot-middleware/client?path=http://localhost:${port}/__webpack_hmr`,
+      'babel-polyfill',
+      './src/main/index.js'
+    ]
   },
-  exclude: /node_modules/
-})
 
-// add hot-reload related code to entry chunks
-var polyfill = 'eventsource-polyfill'
-var devClient = './build/dev-client'
-Object.keys(config.entry).forEach(function (name, i) {
-  var extras = i === 0 ? [polyfill, devClient] : [devClient]
-  config.entry[name] = extras.concat(config.entry[name])
-})
+  output: {
+    path: path.resolve(__dirname, '../dist'),
+    publicPath: `http://localhost:${port}/static/`
+  },
 
-config.port = 8080;
-config.output.path = path.resolve(__dirname, '../dist')
-config.output.publicPath =  'http://localhost:' + config.port + '/static/'
+  module: {
+    rules: [
+      {
+        test: /\.jsx$/,
+        exclude: /node_modules/,
+        loaders: ['react-hot-loader', 'babel-loader?presets[]=react&presets[]=es2015&presets[]=stage-2']
+      }
+    ]
+  },
 
-config.plugins = (config.plugins || []).concat([
-  new webpack.DefinePlugin({
-    'process.env.NODE_ENV': JSON.stringify('development')
-  }),
-  new webpack.optimize.OccurenceOrderPlugin(),
-  new webpack.HotModuleReplacementPlugin(),
-  new webpack.NoErrorsPlugin(),
-  // https://github.com/ampedandwired/html-webpack-plugin
-  new HtmlWebpackPlugin({
-    filename: '../dist/index.html',
-    template: 'src/renderer/index.html',
-    inject: true,
-    excludeChunks: ['electron']
-  })
-])
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify('development')
+      }
+    }),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
+    // https://github.com/ampedandwired/html-webpack-plugin
+    new HtmlWebpackPlugin({
+      filename: '../dist/index.html',
+      template: 'src/renderer/index.html',
+      inject: true,
+      excludeChunks: ['electron']
+    })
+  ]
+}
 
-module.exports = config
+export default merge(baseConfig, devConfig)
